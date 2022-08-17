@@ -1,8 +1,6 @@
 package ru.mfilatov.smallbenchmarks;
 
-import lombok.Cleanup;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -10,8 +8,6 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.zeroturnaround.exec.ProcessExecutor;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
