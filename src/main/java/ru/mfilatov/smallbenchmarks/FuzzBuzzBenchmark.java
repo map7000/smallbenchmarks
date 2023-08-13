@@ -21,7 +21,6 @@ public class FuzzBuzzBenchmark {
   public int size;
 
   private static final OutputStream out = OutputStream.nullOutputStream();
-  private static final FuzzBuzzBenchmark fuzzBuzzBenchmark = new FuzzBuzzBenchmark();
   private static final byte[] fuzz = "Fuzz".getBytes();
   private static final byte[] buzz = "Buzz".getBytes();
 
@@ -61,12 +60,12 @@ public class FuzzBuzzBenchmark {
 
   @Benchmark
   public void fuzzBuzzCounterJmh() {
-    fuzzBuzzBenchmark.fuzzBuzzCounter(size, out);
+    this.fuzzBuzzCounter(size, out);
   }
 
   @Benchmark
   public void fuzzBuzzModuluJmh() {
-    fuzzBuzzBenchmark.fuzzBuzzModulu(size, out);
+    this.fuzzBuzzModulu(size, out);
   }
 
   public static void main(String[] args) throws RunnerException {
