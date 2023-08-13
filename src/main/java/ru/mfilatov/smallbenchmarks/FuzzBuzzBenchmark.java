@@ -17,64 +17,61 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @State(Scope.Benchmark)
 public class FuzzBuzzBenchmark {
-    @Param({"100", "1000", "1000000", "1000000000"})
-    public int size;
+  @Param({"100", "1000", "1000000", "1000000000"})
+  public int size;
 
-    public static OutputStream out = OutputStream.nullOutputStream();
-    public static FuzzBuzzBenchmark fuzzBuzzBenchmark = new FuzzBuzzBenchmark();
-    final static byte[] fuzz = "Fuzz".getBytes();
-    final static byte[] buzz = "Buzz".getBytes();
+  private static final OutputStream out = OutputStream.nullOutputStream();
+  private static final FuzzBuzzBenchmark fuzzBuzzBenchmark = new FuzzBuzzBenchmark();
+  private static final byte[] fuzz = "Fuzz".getBytes();
+  private static final byte[] buzz = "Buzz".getBytes();
 
-    @SneakyThrows
-    public void fuzzBuzzCounter(int size, OutputStream out) {
-        byte count3 = 0;
-        byte count5 = 0;
-        for (int i = 1; i <= size; i++) {
-            count3++;
-            count5++;
-            if (count3 == 3) {
-                count3 = 0;
-                out.write(fuzz);
-            }
-            if (count5 == 5) {
-                out.write(buzz);
-                count5 = 0;
-            }
-            if (count5 != 0 && count3 != 0) out.write(i);
-            out.write('\n');
-        }
+  @SneakyThrows
+  public void fuzzBuzzCounter(int size, OutputStream out) {
+    byte count3 = 0;
+    byte count5 = 0;
+    for (int i = 1; i <= size; i++) {
+      count3++;
+      count5++;
+      if (count3 == 3) {
+        count3 = 0;
+        out.write(fuzz);
+      }
+      if (count5 == 5) {
+        out.write(buzz);
+        count5 = 0;
+      }
+      if (count5 != 0 && count3 != 0) out.write(i);
+      out.write('\n');
     }
+  }
 
-    @SneakyThrows
-    public void fuzzBuzzModulu(int size, OutputStream out) {
-        boolean mod3;
-        boolean mod5;
-        for (int i = 1; i <= size; i++) {
-            mod3 = i % 3 == 0;
-            mod5 = i % 5 == 0;
-            if (mod3) out.write(fuzz);
-            if (mod5) out.write(buzz);
-            if (!mod3 || !mod5) out.write(i);
-            out.write('\n');
-        }
+  @SneakyThrows
+  public void fuzzBuzzModulu(int size, OutputStream out) {
+    boolean mod3;
+    boolean mod5;
+    for (int i = 1; i <= size; i++) {
+      mod3 = i % 3 == 0;
+      mod5 = i % 5 == 0;
+      if (mod3) out.write(fuzz);
+      if (mod5) out.write(buzz);
+      if (!mod3 || !mod5) out.write(i);
+      out.write('\n');
     }
+  }
 
-    @Benchmark
-    public void fuzzBuzzCounterJmh() {
-        fuzzBuzzBenchmark.fuzzBuzzCounter(size, out);
-    }
+  @Benchmark
+  public void fuzzBuzzCounterJmh() {
+    fuzzBuzzBenchmark.fuzzBuzzCounter(size, out);
+  }
 
-    @Benchmark
-    public void fuzzBuzzModuluJmh() {
-        fuzzBuzzBenchmark.fuzzBuzzModulu(size, out);
-    }
+  @Benchmark
+  public void fuzzBuzzModuluJmh() {
+    fuzzBuzzBenchmark.fuzzBuzzModulu(size, out);
+  }
 
+  public static void main(String[] args) throws RunnerException {
+    Options opt = new OptionsBuilder().include(FuzzBuzzBenchmark.class.getSimpleName()).build();
 
-    public static void main(String[] args) throws RunnerException {
-        Options opt = new OptionsBuilder()
-                .include(FuzzBuzzBenchmark.class.getSimpleName())
-                .build();
-
-        new Runner(opt).run();
-    }
+    new Runner(opt).run();
+  }
 }
